@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Poll">
+
+	<select id="check" resultType="int" parameterType="String">
+ 		select count(*) from IGA_admin where admin_id=#{id}
+ 	</select>
+ 	
+	<select id="getAdmin" resultType="poll.AdminDataBean" parameterType="String">
+ 		select * from IGA_admin where admin_id=#{id}
+ 	</select>
+ 	
+ 	<select id="surveyCount" resultType="int" parameterType="String">
+ 		select count(*) from IGA_s where admin_id=#{id}
+ 	</select>
+ 	
+ 	<select id="getSurvey" resultType="poll.SurveyDataBean" parameterType="String">
+		select * from IGA_s where admin_id = #{id}
+	</select>
+	
+	<insert id="insertSurvey" parameterType="java.util.Map">
+		insert into IGA_s values(
+			IGA_s_seq.nextVal,#{surveyName},#{id}
+		)
+	</insert>
+	
+	<select id="getS_num" resultType="int" parameterType="java.util.Map">
+		select s_num from IGA_s where s_name=#{surveyName} and admin_id = #{id}
+	</select>
+	
+	<insert id="insertQ" parameterType="java.util.Map">
+		insert into IGA_s_Q values(
+			IGA_s_Q_seq.nextVal ,#{qname},#{qform},#{s_num}
+		)
+	</insert>
+	
+	<select id="getS_q_num" resultType="int" parameterType="java.util.Map">
+		select s_q_num from IGA_s_Q where s_q=#{qname} and s_a_form = #{qform} and s_num =#{s_num}
+	</select>
+	
+	<insert id="insertA" parameterType="java.util.Map">
+		insert into IGA_s_A values(
+			IGA_s_A_seq.nextVal,#{a},0,#{s_q_num}
+		)
+	</insert>
+	
+	<select id="getSurveyInfo" resultType="poll.SurveyDataBean" parameterType="java.util.Map">
+		select * from IGA_s where admin_id = #{id} and s_num = #{s_num}
+	</select>
+	
+	<select id="checkName" resultType="int" parameterType="java.util.Map">
+		select count(*) from IGA_s_member where s_member_name = #{member_name} and s_num = #{s_num}
+	</select>
+	
+	<insert id="insertMember" parameterType="java.util.Map">
+		insert into IGA_s_member values(
+			#{member_name},#{today},#{s_num}
+		)
+	</insert>
+	
+	<select id="getSurveyQ" resultType="poll.SurveyQDataBean" parameterType="int">
+		select * from IGA_s_Q where s_num = #{s_num} order by s_q_num asc
+	</select>
+	
+	<select id="getSurveyA" resultType="poll.SurveyADataBean" parameterType="int">
+		select * from IGA_s_A where s_q_num = #{q_num} order by s_a_num asc
+	</select>
+	
+	<select id="getCount" resultType="int" parameterType="int">
+		select s_a_count from IGA_s_A where s_a_num = #{anum}
+	</select>
+	
+	<update id="insertCount" parameterType="java.util.Map">
+		update IGA_s_A set s_a_count =#{rec} where s_a_num=#{anum}
+	</update>
+	
+	<select id="getQcount" resultType="int" parameterType="int">
+		select count(*) from IGA_s_Q where s_num = #{s_num}
+	</select>
+	
+	<select id="memberCount" resultType="int" parameterType="int">
+		select count(*) from IGA_s_member where s_num = #{s_num}
+	</select>
+	
+	<select id="getMember" resultType="poll.MemberDataBean" parameterType="int">
+		select * from IGA_s_member where s_num = #{s_num}
+	</select>
+	
+	<select id="getTitle" resultType="String" parameterType="int">
+		select s_name from IGA_s where s_num = #{s_num}
+	</select>
+	
+	<select id="todayCount" resultType="int" parameterType="java.util.Map">
+		select count(*) from IGA_s_member where s_num = #{s_num} and s_member_date = #{today}
+	</select>
+	
+	<select id="getq_nums" resultType="int" parameterType="int">
+		select s_q_num from IGA_s_Q where s_num=#{s_num}
+	</select>
+	
+	<delete id="deleteS" parameterType="int">
+		delete from IGA_s where s_num=#{s_num}
+	</delete>
+	
+	<delete id="deleteA" parameterType="int">
+		delete from IGA_s_A where s_q_num=#{s_q_num}
+	</delete>
+	
+	<delete id="deleteQ" parameterType="int">
+		delete from IGA_s_Q where s_num=#{s_num}
+	</delete>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+

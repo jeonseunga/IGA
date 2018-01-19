@@ -10,7 +10,7 @@
 	</head>
 	<body>
 		<div class="container">
-			<h1>설문조사 Admin_login</h1>
+			<h1>설문조사  Admin_login</h1>
 			<div class="block"></div>
 			<div align="center">
 				<div>
